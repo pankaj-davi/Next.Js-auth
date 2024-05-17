@@ -10,10 +10,8 @@ export function setAuthCookies(accessToken: string, refreshToken: string) {
   cookies.set("refreshToken", refreshToken, { maxAge: 7 * 24 * 60 * 60 });
 }
 export function clearAuthCookies() {
-  // Set access token cookie
   cookies.remove("accessToken"); 
 
-  // Set refresh token cookie
   cookies.remove("refreshToken");
 }
 
