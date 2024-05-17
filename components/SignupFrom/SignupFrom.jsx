@@ -1,11 +1,18 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 
-import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
+import {
+  Alert,
+  Button,
+  IconButton,
+  InputAdornment,
+  Snackbar,
+  TextField,
+} from "@mui/material";
 import AuthCard from "../AuthCard/AuthCard";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import axiosInstance from "@/utils/axiosInstance";
 
 const SignupFrom = () => {
   const navigate = useRouter();
@@ -22,6 +29,7 @@ const SignupFrom = () => {
     firstName: "",
     lastName: "",
   });
+
 
   const handleInputsChange = (event) => {
     if (event.target.name === "email") {
@@ -53,15 +61,10 @@ const SignupFrom = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      // const res = await axios.post("/api/register", user);
-      // console.log(res.data);
-      const response = await axios.post("/api/register", {
-        name: userInputs.firstName,
-        email: userInputs.email,
-        password: userInputs.password,
+      const response = await axiosInstance.post(`/api/auth/signup`, {
+        ...userInputs,
       });
       if (response.status == 200 || response.status == 201) {
-        console.log("user added successfully");
         setValidationErrors({
           email: "",
           password: "",
@@ -72,7 +75,8 @@ const SignupFrom = () => {
       }
     } catch (err) {
       // Handle error
-      alert(JSON.stringify(err));
+      console.log(err);
+      // setIsError(() => ({ error: true, message: JSON.stringify(err.message) }));
     }
   };
 

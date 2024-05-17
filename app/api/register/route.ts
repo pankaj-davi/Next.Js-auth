@@ -8,7 +8,6 @@ connect();
 export async function POST(request: NextRequest) {
   try {
     const { name, email, password } = await request.json();
-    console.log("check" , email)
 
     const user = await User.findOne({ email });
 

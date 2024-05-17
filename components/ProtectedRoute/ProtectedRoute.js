@@ -43,9 +43,6 @@ const ProtectedRoute = () => {
       }
     }, [tokenExpireTime]);
 
-    // if (isRefreshing) {
-    //   return <div>Refreshing...</div>;
-    // }
 
     if (!accessToken) {
       return redirectToLogin();

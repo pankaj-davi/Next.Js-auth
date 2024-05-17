@@ -44,12 +44,10 @@ export const authOptions: NextAuthOptions = {
       return user;
     },
     async jwt({ token, user }) {
-      console.log({token, user } , "tokentokentoken")
  
       return {...token, ...user};
     },
     async session({ session, token }: { session: any; token: any }) {
-      console.log(session, token  , 'session, token ')
       if (session.user) {
         session.user.email = token.email;
         session.user.name = token.name;

@@ -1,13 +1,15 @@
-'use client'
+"use client";
 
 import React, { useState } from "react";
 import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
+
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
 import AuthCard from "../AuthCard/AuthCard";
 import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
+
+import { setAuthCookies } from "../../utils/authUtils";
+import axiosInstance from "@/utils/axiosInstance";
 
 const LoginForm = () => {
   const [userInputs, setUserInputs] = useState({ email: "", password: "" });
@@ -23,15 +25,17 @@ const LoginForm = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await signIn("credentials", {
-        email: userInputs.email,
-        password: userInputs.password,
-        redirect: false,
+      const response = await axiosInstance.post(`/api/auth/login`, {
+        ...userInputs,
       });
-      console.log(await response , "responseresponseresponseresponseresponse");
+
+      setAuthCookies(response.data.accessToken, response.data.refreshToken);
+      if(response.status === 200){
+        router.push("/dashboard")
+      }
+
     } catch (err) {
-      // Handle error
-      alert(JSON.stringify(err));
+      alert(JSON.stringify(err?.response?.data?.message));
     }
   };
 
@@ -85,7 +89,7 @@ const LoginForm = () => {
         />
         <Button
           type="submit"
-          size='small'
+          size="small"
           variant="contained"
           color="primary"
           fullWidth
